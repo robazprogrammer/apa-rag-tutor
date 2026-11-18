@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+docs/*
+!docs/APA_7_Student_Guide.md
+!docs/README.md

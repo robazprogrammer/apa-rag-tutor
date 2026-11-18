@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APA RAG Tutor</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="edition">APA Style · 7th edition</p>
+      <h1>APA RAG Tutor</h1>
+      <p>Find formatting and citation guidance for essays, discussion posts, and other assignments.</p>
+    </header>
+    <form id="question-form">
+      <label for="question">What’s your APA question?</label>
+      <textarea id="question" name="question" maxlength="500" required rows="3" placeholder="How do I cite a source with three authors?"></textarea>
+      <div class="examples" aria-label="Example questions">
+        <button type="button" data-question="What goes on an APA student title page?">Title page</button>
+        <button type="button" data-question="Do I need a page number when I paraphrase?">Paraphrasing</button>
+        <button type="button" data-question="Does my Canvas discussion post need a title page?">Discussion posts</button>
+      </div>
+      <details>
+        <summary>Assignment directions <span>(optional, used in AI mode)</span></summary>
+        <label class="visually-hidden" for="directions">Assignment or instructor directions</label>
+        <textarea id="directions" name="directions" maxlength="2000" rows="3" placeholder="Example: Use APA citations and references. No title page required."></textarea>
+      </details>
+      <fieldset>
+        <legend>How would you like to use the tutor?</legend>
+        <label><input type="radio" name="mode" value="guide" checked> Search the guide <small>Runs with Python alone</small></label>
+        <label><input type="radio" name="mode" value="ai"> Ask the local AI <small>Requires Ollama and its model</small></label>
+      </fieldset>
+      <div class="form-actions">
+        <button class="submit" type="submit">Search the guide</button>
+        <button id="clear-question" class="secondary" type="button">Clear question</button>
+      </div>
+    </form>
+    <div id="status" role="status" aria-live="polite"></div>
+    <button id="save-results" class="secondary" type="button" hidden>Save results as PDF</button>
+    <section id="print-question">
+      <h2>Question</h2>
+      <p id="submitted-question"></p>
+    </section>
+    <section id="answer-section" hidden>
+      <h2>AI answer</h2>
+      <ol id="answer"></ol>
+      <p class="meta">Need an exact citation? Use the <a href="#citation-builder">citation builder</a>. It follows APA rules in code, with no AI.</p>
+    </section>
+    <section id="sources-section" hidden>
+      <h2>Guide passages</h2>
+      <ol id="sources"></ol>
+    </section>
+    <section id="citation-builder">
+      <h2>Citation builder <span class="tag">No AI · always runs</span></h2>
+      <p class="meta">Builds APA 7 in-text citations with Python rules. Leave the quote length blank for a paraphrase.</p>
+      <form id="cite-form" class="cite-grid">
+        <label>Author surnames or organization
+          <input name="authors" maxlength="2500" required placeholder="Rivera, Chen, Patel">
+        </label>
+        <label>Year
+          <input name="year" maxlength="10" required placeholder="2024 or n.d.">
+        </label>
+        <label>Locator
+          <select name="locator_kind">
+            <option value="none">None</option>
+            <option value="page" selected>Page</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="timestamp">Timestamp</option>
+          </select>
+        </label>
+        <label>Page, paragraph, or time
+          <input name="locator" maxlength="40" placeholder="18 or 18-19">
+        </label>
+        <label>Quote length in words <small>(blank = paraphrase)</small>
+          <input name="quote_words" type="number" min="1" max="2000" placeholder="42">
+        </label>
+        <div class="form-actions"><button class="submit" type="submit">Build citation</button></div>
+      </form>
+      <div id="cite-status" role="status" aria-live="polite"></div>
+      <dl id="cite-result" hidden>
+        <dt>Parenthetical</dt><dd><code id="cite-parenthetical"></code> <button type="button" class="secondary copy" data-copy="cite-parenthetical">Copy</button></dd>
+        <dt>Narrative</dt><dd><code id="cite-narrative"></code> <button type="button" class="secondary copy" data-copy="cite-narrative">Copy</button></dd>
+        <dt>Where it goes</dt><dd id="cite-placement"></dd>
+        <dt id="cite-notes-label">Check</dt><dd><ul id="cite-notes"></ul></dd>
+      </dl>
+    </section>
+    <footer>Follow your instructor’s directions for each assignment. Verify AI answers against the linked sources.</footer>
+  </main>
+</body>
+</html>
